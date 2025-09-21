@@ -1,0 +1,38 @@
+name: backend
+services:
+  redis:
+    image: docker.io/redis/redis-stack
+    container_name: redis
+  pg:
+    image: postgres
+    container_name: pg
+    volumes:
+      - ./docker/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER={pg_user}
+      - POSTGRES_PASSWORD={pg_password}
+  app:
+    build: .
+    image: backend-image
+    container_name: backend-app
+    env_file:
+      - .env.docker.dev
+    depends_on:
+      - redis
+      - pg
+    environment:
+      - ALLOWED_ORIGINS="http://localhost:5173"
+      - ACCESS_COOKIE_MAX_AGE=900000
+      - DATABASE_URL=postgresql://{pg_user}:{pg_password}@postgres:5432/blogpost
+      - GMAIL_ADDRESS={gmail_address}
+      - GMAIL_PASSWORD={gmail_password}
+      - JWT_ACCESS_EXPIRATION='1m'
+      - JWT_ACCESS_SECRET={access_token_secret}
+      - JWT_REFRESH_EXPIRATION='7d'
+      - JWT_REFRESH_SECRET={refresh_token_secret}
+      - PORT=4002
+      - REFRESH_COOKIE_MAX_AGE=604800000
+      - REDIS_HOST=redis
+    ports:
+      - 4002:4002
+    command: npm run start

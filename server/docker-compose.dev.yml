@@ -1,0 +1,31 @@
+name: backend-dev
+services:
+  redis:
+    image: docker.io/redis/redis-stack
+    container_name: redis-dev
+    ports:
+      - "6379:6379"
+      - "8001:8001"
+  pg:
+    image: postgres
+    container_name: pg-dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./docker-dev/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
+  pg-admin:
+    image: dpage/pgadmin4
+    user: ${UID}:${GID}
+    container_name: pg-admin-dev
+    ports:
+      - "5050:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=user@domain.com
+      - PGADMIN_DEFAULT_PASSWORD=1234
+    depends_on:
+      - pg
+    volumes:
+      - ./docker-dev/pgadmin:/var/lib/pgadmin
