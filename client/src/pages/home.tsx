@@ -11,7 +11,7 @@ function Header() {
 			<div className="flex h-14 items-center">
 				<div className="md:mr-4 mr-0 flex items-center">
 					<Mail className="h-6 w-6 mr-2" />
-					<span className="font-bold">Chitty Chat</span>
+					<span className="font-bold">Quant Boxx</span>
 				</div>
 				<div className="flex flex-1 items-center justify-end space-x-4">
 					<nav className="flex items-center space-x-2">
